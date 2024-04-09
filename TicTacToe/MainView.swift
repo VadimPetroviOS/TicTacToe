@@ -36,12 +36,12 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                         }
                         .alert(isPresented: $viewModel.showingWinner) {
                             Alert(
-                                title: Text("Победили \(viewModel.sign)!!!"),
+                                title: Text(viewModel.sign),
                                 message: Text("Сыграем еще?"),
-                                primaryButton: .default(Text("ОК")) {
+                                primaryButton: .default(Text("ДА")) {
                                     viewModel.ticTacToeDict = [:]
                                 },
-                                secondaryButton: .cancel()
+                                secondaryButton: .default(Text("НЕТ"))
                             )
                         }
                     }

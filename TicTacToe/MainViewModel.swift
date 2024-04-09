@@ -26,18 +26,18 @@ final class MainViewModel: MainViewModelProtocol {
             }
         }
         if let randomElement = getRandomElement(from: allPositionArray) {
-                self.ticTacToeDict[randomElement] = "circle"
-            if ticTacToePositionArray.count > 4 {
-                if checkForVictory("cirle") {
-                    showingWinner = true
-                    sign = "нолики"
-                }
-            }
+            ticTacToeDict[randomElement] = "circle"
         }
         if ticTacToePositionArray.count > 4 {
             if checkForVictory("multiply") {
                 showingWinner = true
-                sign = "крестики"
+                sign = "Победили крестики!!!"
+            } else if checkForVictory("circle") {
+                    showingWinner = true
+                    sign = "Победили нолики!!!"
+            } else if allPositionArray.isEmpty {
+                showingWinner = true
+                sign = "Ничья"
             }
         }
     }
