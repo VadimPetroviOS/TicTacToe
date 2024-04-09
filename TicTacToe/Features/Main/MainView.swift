@@ -20,6 +20,16 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
     }
     
     var body: some View {
+        contentView
+    }
+    
+    @ViewBuilder
+    private var contentView: some View {
+        playField
+    }
+    
+    @ViewBuilder
+    private var playField: some View {
         VStack(spacing: 20) {
             ForEach(0 ..< 3, id:\.self) { row in
                 HStack(spacing: 20) {
