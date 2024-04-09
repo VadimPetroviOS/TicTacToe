@@ -15,7 +15,7 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
-            MainView()
+            StartView()
         } else {
             logoView
                 .onAppear {
