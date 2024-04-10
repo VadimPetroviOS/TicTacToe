@@ -12,4 +12,5 @@ protocol MainViewModelProtocol: ObservableObject {
     var showingWinner: Bool { get set }
     var sign: String { get set }
     func nextStep()
+    func isButtonActive(_ row: Int, _ column: Int) -> Bool
 }

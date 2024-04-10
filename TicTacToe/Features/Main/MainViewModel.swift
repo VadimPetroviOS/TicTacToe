@@ -49,6 +49,13 @@ final class MainViewModel: MainViewModelProtocol {
         }
     }
     
+    func isButtonActive(_ row: Int, _ column: Int) -> Bool {
+        guard let cellValue = ticTacToeDict["\(row)\(column)"] else {
+            return true
+        }
+        return cellValue != "multiply" && cellValue != "circle"
+    }
+    
     private func getRandomElement(from array: [String]) -> String? {
         return array.randomElement()
     }

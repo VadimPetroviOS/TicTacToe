@@ -54,6 +54,9 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                                 secondaryButton: .default(Text("НЕТ"))
                             )
                         }
+                        .allowsHitTesting(
+                            viewModel.isButtonActive(row,column)
+                        )
                     }
                 }
             }
