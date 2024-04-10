@@ -50,6 +50,7 @@ final class MainViewModel: MainViewModelProtocol {
                 if let randomElement = self.getRandomElement(from: allPositionArray) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         self.ticTacToeDict[randomElement] = "circle"
+                        AudioService.shared.playCircleActionSound()
                         self.isTimeStop = false
                         if self.checkForVictory("circle") && ticTacToePositionArray.count > 4 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
