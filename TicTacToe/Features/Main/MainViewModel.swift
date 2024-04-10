@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 final class MainViewModel: MainViewModelProtocol {
     @Published
@@ -18,14 +17,26 @@ final class MainViewModel: MainViewModelProtocol {
     @Published
     var sign = ""
     
+    @Published
+    var isTimeStop = false
+    
+    @Published
+    private(set) var personScore = 0
+    
+    @Published
+    private(set) var computerScore = 0
+    
     func nextStep() {
+        isTimeStop = true
         DispatchQueue.global().async {
             let ticTacToePositionArray = self.ticTacToeDict.keys
             
             if self.checkForVictory("multiply") && ticTacToePositionArray.count > 4 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     self.showingWinner = true
+                    self.isTimeStop = false
                     self.sign = "Победили крестики!!!"
+                    self.personScore += 1
                 }
             } else {
                 
@@ -37,13 +48,15 @@ final class MainViewModel: MainViewModelProtocol {
                     }
                 }
                 if let randomElement = self.getRandomElement(from: allPositionArray) {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         self.ticTacToeDict[randomElement] = "circle"
-                        
+                        self.isTimeStop = false
                         if self.checkForVictory("circle") && ticTacToePositionArray.count > 4 {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                                 self.showingWinner = true
+                                self.isTimeStop = false
                                 self.sign = "Победили нолики!!!"
+                                self.computerScore += 1
                             }
                         }
                     }
@@ -52,12 +65,13 @@ final class MainViewModel: MainViewModelProtocol {
                 if allPositionArray.isEmpty && ticTacToePositionArray.count > 4 {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         self.showingWinner = true
+                        self.isTimeStop = false
                         self.sign = "Ничья"
                     }
                 }
             }
-            }
         }
+    }
     
     func isButtonActive(_ row: Int, _ column: Int) -> Bool {
         guard let cellValue = ticTacToeDict["\(row)\(column)"] else {

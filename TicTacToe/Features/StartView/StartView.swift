@@ -43,6 +43,7 @@ struct StartView: View {
             }) {
                 Text("Начать игру")
                     .padding(15)
+                    .foregroundColor(.black)
                     .background(Color.yellow)
                     .cornerRadius(10)
             }

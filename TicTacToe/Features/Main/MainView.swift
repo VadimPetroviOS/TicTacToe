@@ -25,7 +25,23 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
     
     @ViewBuilder
     private var contentView: some View {
-        playField
+        ZStack {
+            backgroundImage
+            VStack {
+                Spacer()
+                playField
+                Spacer()
+                scoreView
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var backgroundImage: some View {
+        Image("background")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .edgesIgnoringSafeArea(.all)
     }
     
     @ViewBuilder
@@ -40,10 +56,11 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                         }) {
                             Image(systemName: viewModel.ticTacToeDict["\(row)\(column)"] ?? "")
                                 .imageScale(.large)
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(.black)
                                 .frame(width: 50, height: 50)
                                 .background(Color.yellow)
                         }
+                        .disabled(viewModel.isTimeStop)
                         .alert(isPresented: $viewModel.showingWinner) {
                             Alert(
                                 title: Text(viewModel.sign),
@@ -60,6 +77,29 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var scoreView: some View {
+        HStack {
+            Spacer()
+            HStack {
+                Image(systemName: "person")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                Text(": \(viewModel.personScore)")
+                    .font(.system(size: 40))
+            }
+            Spacer()
+            HStack {
+                Image(systemName: "desktopcomputer")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                Text(": \(viewModel.computerScore)")
+                    .font(.system(size: 40))
+            }
+            Spacer()
         }
     }
 }
