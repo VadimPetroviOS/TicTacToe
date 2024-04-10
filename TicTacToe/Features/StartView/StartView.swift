@@ -13,6 +13,9 @@ struct StartView: View {
     
     var body: some View {
         contentView
+            .onAppear {
+                AudioService.shared.playBackgroundMusic()
+            }
             .fullScreenCover(isPresented: $isShowedView) {
                 MainView()
             }

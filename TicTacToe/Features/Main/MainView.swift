@@ -11,6 +11,8 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
     @StateObject
     private var viewModel: ViewModel
     
+    @State private var showStartView = false
+    
     // MARK: - Initializing View
 
     init() where ViewModel == MainViewModel {
@@ -21,6 +23,9 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
     
     var body: some View {
         contentView
+            .fullScreenCover(isPresented: $showStartView) {
+                StartView()
+            }
     }
     
     @ViewBuilder
@@ -52,6 +57,7 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                     ForEach(0 ..< 3, id:\.self) { column in
                         Button(action: {
                             viewModel.ticTacToeDict["\(row)\(column)"] = "multiply"
+                            AudioService.shared.playCrossActionSound()
                             viewModel.nextStep()
                         }) {
                             Image(systemName: viewModel.ticTacToeDict["\(row)\(column)"] ?? "")
@@ -68,7 +74,9 @@ struct MainView<ViewModel: MainViewModelProtocol>: View {
                                 primaryButton: .default(Text("ДА")) {
                                     viewModel.ticTacToeDict = [:]
                                 },
-                                secondaryButton: .default(Text("НЕТ"))
+                                secondaryButton: .default(Text("НЕТ")) {
+                                    showStartView = true
+                                }
                             )
                         }
                         .allowsHitTesting(
