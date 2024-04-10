@@ -20,34 +20,44 @@ final class MainViewModel: MainViewModelProtocol {
     
     func nextStep() {
         DispatchQueue.global().async {
-            var allPositionArray = ["00", "01", "02", "10", "11", "12", "20", "21", "22"]
             let ticTacToePositionArray = self.ticTacToeDict.keys
-            for element in ticTacToePositionArray {
-                if allPositionArray.contains(element) {
-                    allPositionArray.removeAll { $0 == element }
-                }
-            }
-            if let randomElement = self.getRandomElement(from: allPositionArray) {
-                DispatchQueue.main.async {
-                    self.ticTacToeDict[randomElement] = "circle"
-                }
-            }
-            if ticTacToePositionArray.count > 4 {
+            
+            if self.checkForVictory("multiply") && ticTacToePositionArray.count > 4 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                    if self.checkForVictory("multiply") {
-                        self.showingWinner = true
-                        self.sign = "Победили крестики!!!"
-                    } else if self.checkForVictory("circle") {
-                        self.showingWinner = true
-                        self.sign = "Победили нолики!!!"
-                    } else if allPositionArray.isEmpty {
+                    self.showingWinner = true
+                    self.sign = "Победили крестики!!!"
+                }
+            } else {
+                
+                var allPositionArray = ["00", "01", "02", "10", "11", "12", "20", "21", "22"]
+                
+                for element in ticTacToePositionArray {
+                    if allPositionArray.contains(element) {
+                        allPositionArray.removeAll { $0 == element }
+                    }
+                }
+                if let randomElement = self.getRandomElement(from: allPositionArray) {
+                    DispatchQueue.main.async {
+                        self.ticTacToeDict[randomElement] = "circle"
+                        
+                        if self.checkForVictory("circle") && ticTacToePositionArray.count > 4 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                self.showingWinner = true
+                                self.sign = "Победили нолики!!!"
+                            }
+                        }
+                    }
+                }
+                
+                if allPositionArray.isEmpty && ticTacToePositionArray.count > 4 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                         self.showingWinner = true
                         self.sign = "Ничья"
                     }
                 }
             }
+            }
         }
-    }
     
     func isButtonActive(_ row: Int, _ column: Int) -> Bool {
         guard let cellValue = ticTacToeDict["\(row)\(column)"] else {
